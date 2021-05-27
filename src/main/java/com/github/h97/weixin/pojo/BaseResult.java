@@ -5,6 +5,10 @@ public class BaseResult {
 	private int errcode;
 	private String errmsg;
 
+	public boolean isOk() {
+		return errcode == 0;
+	}
+
 	public int getErrcode() {
 		return errcode;
 	}
