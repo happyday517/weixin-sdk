@@ -5,6 +5,7 @@ public class EncryptedData {
 	private String encryptedData;
 	private String iv;
 	private String sessionKey;
+	private boolean check;
 
 	public String getEncryptedData() {
 		return encryptedData;
@@ -30,4 +31,11 @@ public class EncryptedData {
 		this.sessionKey = sessionKey;
 	}
 
+	public boolean isCheck() {
+		return check;
+	}
+
+	public void setCheck(boolean check) {
+		this.check = check;
+	}
 }

@@ -15,6 +15,7 @@ import org.nutz.json.Json;
 import org.nutz.lang.Encoding;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Streams;
+import org.nutz.mapl.Mapl;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,9 +47,12 @@ public class Weixin {
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
 			cipher.init(Cipher.DECRYPT_MODE, key, iv);
 			byte[] outputBytes = cipher.doFinal(Base64.decode(data.getEncryptedData()));
-			return Json.fromJson(Streams.utf8r(Streams.wrap(outputBytes)));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+			Object decrypt = Json.fromJson(Streams.utf8r(Streams.wrap(outputBytes)));
+			if (data.isCheck() && !config.getAppid().equals(Mapl.cell(decrypt, "watermark.appid")))
+				throw new WeixinException("check failed");
+			return decrypt;
+		} catch (Throwable t) {
+			throw new WeixinException(t);
 		}
 	}
 
